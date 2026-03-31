@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 /* ── Layer metadata ── */
 const LAYERS = [
@@ -43,7 +43,7 @@ const LAYERS = [
     frontColor: '#9ca3af',
     topColor: '#d1d5db',
     rightColor: '#6b7280',
-    thickness: 10,
+    thickness: 6,
     pattern: 'smooth',
   },
   {
@@ -129,7 +129,7 @@ function buildSerpentinePath(baseZ, cx, cy) {
   return pathD;
 }
 
-/* ── Generate parquet planks (dritto a correre) on isometric top surface ── */
+/* ── Generate parquet planks on isometric top surface ── */
 function buildParquetPlanks(baseZ, t, cx, cy) {
   const w = SLAB_W;
   const d = SLAB_D;
@@ -173,12 +173,12 @@ const SLAB_GAP = 40;
 const SERP_GAP = 50;
 const SERP_LENGTH = 5200;
 const SVG_W = 1100;
-const SVG_H = 750;
+const SVG_H = 650;
 const CX = SVG_W / 2;
-const CY = SVG_H / 2;
+const CY = 400;
 
 /* ── Delay helpers ── */
-const SERP_DONE = 1.1 + 0.3 + 2.0; // 3.4 s
+const SERP_DONE = 1.1 + 0.3 + 2.0;
 function layerDelay(i) {
   if (i <= 2) return i * 0.55;
   if (i === 3) return SERP_DONE;
@@ -186,15 +186,20 @@ function layerDelay(i) {
 }
 const SLIDE = 80;
 
+/* ── Phase timing ── */
+const EXPLODE_DURATION = 6300;
+const PAUSE_BEFORE_COMPRESS = 1000;
+const COMPRESS_DURATION = 1200;
+const PAUSE_BEFORE_PULSE = 400;
+const PULSE_DURATION = 3500;
+const PAUSE_BEFORE_RESTART = 1500;
+
 function FloorHeatingExploder() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   const [phase, setPhase] = useState('idle');
   const [animKey, setAnimKey] = useState(0);
   const timerRef = useRef(null);
-
-  const ANIM_DURATION = 6300;
-  const PAUSE_AFTER = 3000;
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -205,33 +210,51 @@ function FloorHeatingExploder() {
     return () => obs.disconnect();
   }, [visible]);
 
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     if (!visible) return;
-    let raf1, raf2;
 
-    const play = () => {
+    const schedule = (fn, ms) => {
+      clearTimer();
+      timerRef.current = setTimeout(fn, ms);
+    };
+
+    const startCycle = () => {
       setPhase('hidden');
       setAnimKey(k => k + 1);
-
-      raf1 = requestAnimationFrame(() => {
-        raf2 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
           setPhase('showing');
-          timerRef.current = setTimeout(play, ANIM_DURATION + PAUSE_AFTER);
+          schedule(() => {
+            setPhase('compressing');
+            schedule(() => {
+              schedule(() => {
+                setPhase('pulsing');
+                schedule(() => {
+                  startCycle();
+                }, PULSE_DURATION + PAUSE_BEFORE_RESTART);
+              }, PAUSE_BEFORE_PULSE);
+            }, COMPRESS_DURATION);
+          }, EXPLODE_DURATION + PAUSE_BEFORE_COMPRESS);
         });
       });
     };
 
-    play();
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-      clearTimeout(timerRef.current);
-    };
-  }, [visible]);
+    startCycle();
+    return clearTimer;
+  }, [visible, clearTimer]);
 
-  const show = phase === 'showing';
+  const show = phase === 'showing' || phase === 'compressing' || phase === 'pulsing';
+  const compressing = phase === 'compressing' || phase === 'pulsing';
+  const pulsing = phase === 'pulsing';
 
-  /* Build geometry */
+  /* Build geometry — EXPLODED */
   const geo = [];
   let z = 0;
 
@@ -270,9 +293,20 @@ function FloorHeatingExploder() {
   const L5 = LAYERS[4];
   const parquetGeo = slabGeo(z, L5.thickness, CX, CY);
   const parquetPlanks = buildParquetPlanks(z, L5.thickness, CX, CY);
+  const explodedParquetZ = z;
   geo.push({ ...L5, ...parquetGeo, baseZ: z, isParquet: true, planks: parquetPlanks });
 
+  /* Build geometry — COMPRESSED */
+  const compressedParquetZ = L1.thickness;
+  const compressedGeo = slabGeo(compressedParquetZ, L5.thickness, CX, CY);
+  const compressedSerpZ = L1.thickness + 2;
+  const compressedSerpPath = buildSerpentinePath(compressedSerpZ, CX, CY);
+
+  const compressDeltaY = explodedParquetZ - compressedParquetZ;
+
   const serpLengthVal = SERP_LENGTH;
+  const COMPRESS_EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
+  const COMPRESS_T = COMPRESS_DURATION + 'ms';
 
   return (
     <div ref={ref} className="w-full overflow-hidden">
@@ -288,6 +322,49 @@ function FloorHeatingExploder() {
             '  0%, 100% { filter: drop-shadow(0 0 3px rgba(234,88,12,0.3)); }',
             '  50%      { filter: drop-shadow(0 0 10px rgba(234,88,12,0.7)); }',
             '}',
+            '@keyframes heatPulse {',
+            '  0%   { opacity: 0; }',
+            '  15%  { opacity: 0.10; }',
+            '  35%  { opacity: 0.02; }',
+            '  50%  { opacity: 0.10; }',
+            '  70%  { opacity: 0.02; }',
+            '  85%  { opacity: 0.10; }',
+            '  100% { opacity: 0; }',
+            '}',
+            '@keyframes tubePulseStroke {',
+            '  0%   { stroke: #fdba74; stroke-width: 4; }',
+            '  15%  { stroke: #ea580c; stroke-width: 6; }',
+            '  35%  { stroke: #fdba74; stroke-width: 4; }',
+            '  50%  { stroke: #ea580c; stroke-width: 6; }',
+            '  70%  { stroke: #fdba74; stroke-width: 4; }',
+            '  85%  { stroke: #ea580c; stroke-width: 6; }',
+            '  100% { stroke: #fdba74; stroke-width: 4; }',
+            '}',
+            '@keyframes heatGlow {',
+            '  0%   { filter: drop-shadow(0 0 0px rgba(234,88,12,0)); }',
+            '  15%  { filter: drop-shadow(0 0 6px rgba(234,88,12,0.3)); }',
+            '  35%  { filter: drop-shadow(0 0 2px rgba(234,88,12,0.08)); }',
+            '  50%  { filter: drop-shadow(0 0 6px rgba(234,88,12,0.3)); }',
+            '  70%  { filter: drop-shadow(0 0 2px rgba(234,88,12,0.08)); }',
+            '  85%  { filter: drop-shadow(0 0 6px rgba(234,88,12,0.3)); }',
+            '  100% { filter: drop-shadow(0 0 0px rgba(234,88,12,0)); }',
+            '}',
+            '@keyframes floorWarmth {',
+            '  0%   { filter: brightness(1) drop-shadow(0 -4px 6px rgba(234,88,12,0)); }',
+            '  15%  { filter: brightness(1.18) drop-shadow(0 -8px 14px rgba(234,88,12,0.3)); }',
+            '  35%  { filter: brightness(1.05) drop-shadow(0 -3px 5px rgba(234,88,12,0.06)); }',
+            '  50%  { filter: brightness(1.18) drop-shadow(0 -8px 14px rgba(234,88,12,0.3)); }',
+            '  70%  { filter: brightness(1.05) drop-shadow(0 -3px 5px rgba(234,88,12,0.06)); }',
+            '  85%  { filter: brightness(1.18) drop-shadow(0 -8px 14px rgba(234,88,12,0.3)); }',
+            '  100% { filter: brightness(1) drop-shadow(0 -4px 6px rgba(234,88,12,0)); }',
+            '}',
+            '@keyframes heatRise {',
+            '  0%   { opacity: 0; transform: translateY(0); }',
+            '  20%  { opacity: 0.6; }',
+            '  50%  { opacity: 0.35; transform: translateY(-18px); }',
+            '  80%  { opacity: 0.12; transform: translateY(-36px); }',
+            '  100% { opacity: 0; transform: translateY(-48px); }',
+            '}',
             '.serp-tube {',
             '  stroke-dasharray: ' + serpLengthVal + ';',
             '  stroke-dashoffset: ' + serpLengthVal + ';',
@@ -298,6 +375,21 @@ function FloorHeatingExploder() {
             '.serp-glow.animate {',
             '  animation: glowPulse 2s ease-in-out infinite;',
             '  animation-delay: 3.5s;',
+            '}',
+            '.heat-pulse-overlay {',
+            '  animation: heatPulse ' + PULSE_DURATION + 'ms ease-in-out forwards;',
+            '}',
+            '.heat-tube-pulse {',
+            '  animation: tubePulseStroke ' + PULSE_DURATION + 'ms ease-in-out forwards;',
+            '}',
+            '.heat-glow-group {',
+            '  animation: heatGlow ' + PULSE_DURATION + 'ms ease-in-out forwards;',
+            '}',
+            '.floor-warmth {',
+            '  animation: floorWarmth ' + PULSE_DURATION + 'ms ease-in-out forwards;',
+            '}',
+            '.heat-rise-wisp {',
+            '  animation: heatRise 1.8s ease-out forwards;',
             '}',
           ].join('\n') }} />
 
@@ -339,6 +431,17 @@ function FloorHeatingExploder() {
                 <stop offset="50%" stopColor="#ea580c" />
                 <stop offset="100%" stopColor="#c2410c" />
               </linearGradient>
+              <linearGradient id="heatOverlayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="50%" stopColor="#ea580c" />
+                <stop offset="100%" stopColor="#fb923c" />
+              </linearGradient>
+              <linearGradient id="heatRiseGrad" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stopColor="#ea580c" stopOpacity="0.55" />
+                <stop offset="30%" stopColor="#fb923c" stopOpacity="0.35" />
+                <stop offset="70%" stopColor="#fdba74" stopOpacity="0.12" />
+                <stop offset="100%" stopColor="#fdba74" stopOpacity="0" />
+              </linearGradient>
               <pattern id="heatWoodGrain" width="40" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
                 <rect width="40" height="12" fill="none" />
                 <line x1="0" y1="3" x2="40" y2="3" stroke="#8b6f47" strokeWidth="0.5" opacity="0.15" />
@@ -351,20 +454,24 @@ function FloorHeatingExploder() {
             {geo.map((g, i) => {
               const delay = layerDelay(i);
 
-              /* ── SERPENTINA (TUBO RADIANTE) ── */
+              /* ── SERPENTINA ── */
               if (g.isSerpentina) {
                 const isLeft = i % 2 === 0;
                 const anchorY = isLeft ? (g.c.tnl[1] + g.c.bnl[1]) / 2 : (g.c.tfr[1] + g.c.bfr[1]) / 2;
                 const dotX = isLeft ? g.c.tnl[0] - 4 : g.c.tfr[0] + 4;
-                const endX = isLeft ? g.c.tnl[0] - 80 : g.c.tfr[0] + 100;
+                const endX = isLeft ? g.c.tnl[0] - 50 : g.c.tfr[0] + 50;
                 return (
                   <g
                     key={g.num}
-                    className={show ? 'serp-glow animate' : ''}
+                    className={show && !compressing ? 'serp-glow animate' : ''}
                     style={{
-                      opacity: show ? 1 : 0,
-                      transform: show ? 'translateY(0)' : 'translateY(' + SLIDE + 'px)',
-                      transition: 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
+                      opacity: show && !compressing ? 1 : 0,
+                      transform: show
+                        ? (compressing ? 'translateY(' + compressDeltaY + 'px) scale(0.95)' : 'translateY(0)')
+                        : 'translateY(' + SLIDE + 'px)',
+                      transition: compressing
+                        ? 'opacity 0.6s ease, transform ' + COMPRESS_T + ' ' + COMPRESS_EASE
+                        : 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
                     }}
                   >
                     <path d={g.path} fill="none" stroke="#7c2d12" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" opacity="0.2"
@@ -373,7 +480,7 @@ function FloorHeatingExploder() {
                       className={'serp-tube' + (show ? ' animate' : '')} style={{ animationDelay: (delay + 0.3) + 's' }} />
                     <path d={g.path} fill="none" stroke="#fdba74" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"
                       className={'serp-tube' + (show ? ' animate' : '')} style={{ animationDelay: (delay + 0.3) + 's' }} />
-                    <g style={{ opacity: show ? 1 : 0, transition: 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
+                    <g style={{ opacity: show && !compressing ? 1 : 0, transition: compressing ? 'opacity 0.4s ease' : 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
                       <circle cx={dotX} cy={anchorY} r="3.5" fill="#ea580c" />
                       <line x1={dotX} y1={anchorY} x2={endX} y2={anchorY} stroke="#ea580c" strokeWidth="2.2" strokeDasharray="6,4" opacity="0.6" />
                     </g>
@@ -386,14 +493,19 @@ function FloorHeatingExploder() {
                 const isLeft = i % 2 === 0;
                 const anchorY = isLeft ? (g.c.tnl[1] + g.c.bnl[1]) / 2 : (g.c.tfr[1] + g.c.bfr[1]) / 2;
                 const dotX = isLeft ? g.c.tnl[0] - 4 : g.c.tfr[0] + 4;
-                const endX = isLeft ? g.c.tnl[0] - 80 : g.c.tfr[0] + 100;
+                const endX = isLeft ? g.c.tnl[0] - 50 : g.c.tfr[0] + 50;
                 return (
                   <g
                     key={g.num}
+                    className={pulsing ? 'floor-warmth' : ''}
                     style={{
                       opacity: show ? 1 : 0,
-                      transform: show ? 'translateY(0)' : 'translateY(' + SLIDE + 'px)',
-                      transition: 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
+                      transform: show
+                        ? (compressing ? 'translateY(' + compressDeltaY + 'px)' : 'translateY(0)')
+                        : 'translateY(' + SLIDE + 'px)',
+                      transition: compressing
+                        ? 'transform ' + COMPRESS_T + ' ' + COMPRESS_EASE
+                        : 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
                     }}
                   >
                     <polygon points={g.right} fill={g.rightColor} stroke="#00000010" strokeWidth="0.5" />
@@ -411,7 +523,7 @@ function FloorHeatingExploder() {
                           stroke="#9a7a5f"
                           strokeWidth="0.6"
                           style={{
-                            opacity: show ? 0.92 : 0,
+                            opacity: show ? 1 : 0,
                             transform: show ? 'translateY(0)' : 'translateY(12px)',
                             transition: 'opacity 0.5s ease ' + plankDelay + 's, transform 0.5s ease ' + plankDelay + 's',
                           }}
@@ -419,7 +531,7 @@ function FloorHeatingExploder() {
                       );
                     })}
                     <polygon points={g.top} fill="url(#heatWoodGrain)" style={{ pointerEvents: 'none' }} />
-                    <g style={{ opacity: show ? 1 : 0, transition: 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
+                    <g style={{ opacity: show && !compressing ? 1 : 0, transition: compressing ? 'opacity 0.4s ease' : 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
                       <circle cx={dotX} cy={anchorY} r="3.5" fill={g.frontColor} />
                       <line x1={dotX} y1={anchorY} x2={endX} y2={anchorY} stroke={g.frontColor} strokeWidth="2.2" strokeDasharray="6,4" opacity="0.6" />
                     </g>
@@ -431,14 +543,22 @@ function FloorHeatingExploder() {
               const isLeft = i % 2 === 0;
               const anchorY = isLeft ? (g.c.tnl[1] + g.c.bnl[1]) / 2 : (g.c.tfr[1] + g.c.bfr[1]) / 2;
               const dotX = isLeft ? g.c.tnl[0] - 4 : g.c.tfr[0] + 4;
-              const endX = isLeft ? g.c.tnl[0] - 80 : g.c.tfr[0] + 100;
+              const endX = isLeft ? g.c.tnl[0] - 50 : g.c.tfr[0] + 50;
+
+              const isBase = i === 0;
+              const hideOnCompress = !isBase;
+
               return (
                 <g
                   key={g.num}
                   style={{
-                    opacity: show ? 1 : 0,
-                    transform: show ? 'translateY(0)' : 'translateY(' + SLIDE + 'px)',
-                    transition: 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
+                    opacity: show ? (compressing && hideOnCompress ? 0 : 1) : 0,
+                    transform: show
+                      ? (compressing && hideOnCompress ? 'translateY(20px) scale(0.96)' : 'translateY(0)')
+                      : 'translateY(' + SLIDE + 'px)',
+                    transition: compressing
+                      ? 'opacity 0.6s ease, transform ' + COMPRESS_T + ' ' + COMPRESS_EASE
+                      : 'opacity 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's, transform 1.6s cubic-bezier(0.16,1,0.3,1) ' + delay + 's',
                   }}
                 >
                   <polygon points={g.right} fill={g.rightColor} stroke="#00000010" strokeWidth="0.5" />
@@ -453,7 +573,7 @@ function FloorHeatingExploder() {
                     </>
                   )}
                   {g.pattern === 'smooth' && <polygon points={g.top} fill="url(#heatSmooth)" />}
-                  <g style={{ opacity: show ? 1 : 0, transition: 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
+                  <g style={{ opacity: show && !compressing ? 1 : 0, transition: compressing ? 'opacity 0.4s ease' : 'opacity 1s ease ' + (delay + 0.8) + 's' }}>
                     <circle cx={dotX} cy={anchorY} r="3.5" fill={g.frontColor} />
                     <line x1={dotX} y1={anchorY} x2={endX} y2={anchorY} stroke={g.frontColor} strokeWidth="2.2" strokeDasharray="6,4" opacity="0.6" />
                   </g>
@@ -461,38 +581,98 @@ function FloorHeatingExploder() {
               );
             })}
 
-            {/* Top annotation */}
-            {(() => {
-              return null;
-            })()}
+            {/* ── PULSING: tubes underneath + heat shimmer rising ── */}
+            {pulsing && (
+              <g>
+                {/* Tubes visible underneath */}
+                <g className="heat-glow-group" opacity="0.55">
+                  <path d={compressedSerpPath} fill="none" stroke="#7c2d12" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
+                  <path d={compressedSerpPath} fill="none" stroke="url(#tubeGrad)" strokeLinecap="round" strokeLinejoin="round"
+                    className="heat-tube-pulse"
+                    style={{ strokeDasharray: 'none', strokeDashoffset: 0 }} />
+                </g>
+                {/* Subtle warm tint on parquet surface */}
+                <polygon
+                  points={compressedGeo.top}
+                  fill="url(#heatOverlayGrad)"
+                  className="heat-pulse-overlay"
+                  style={{ mixBlendMode: 'overlay' }}
+                />
+                {/* Vertical heat lines rising from across the parquet surface */}
+                {(() => {
+                  const c = compressedGeo.c;
+                  const lines = [];
+                  const cols = 6;
+                  const rows = 5;
+                  let idx = 0;
+                  for (let r = 0; r < rows; r++) {
+                    for (let cIdx = 0; cIdx < cols; cIdx++) {
+                      const u = (cIdx + 0.5 + (r % 2 === 0 ? 0 : 0.4)) / cols;
+                      const v = (r + 0.5) / rows;
+                      if (u < 0.05 || u > 0.95 || v < 0.05 || v > 0.95) continue;
+                      const topL = c.tfl;
+                      const topR = c.tfr;
+                      const botL = c.tnl;
+                      const botR = c.tnr;
+                      const tx = topL[0] + u * (topR[0] - topL[0]);
+                      const ty = topL[1] + u * (topR[1] - topL[1]);
+                      const bx = botL[0] + u * (botR[0] - botL[0]);
+                      const by = botL[1] + u * (botR[1] - botL[1]);
+                      const px = tx + v * (bx - tx);
+                      const py = ty + v * (by - ty);
+                      const seed = r * 17 + cIdx * 31;
+                      const h = 18 + (seed % 14);
+                      const del = (idx * 0.22) + (seed % 100) * 0.005;
+                      const dur = 1.4 + (seed % 8) * 0.12;
+                      lines.push(
+                        <line
+                          key={'hl-' + idx}
+                          x1={px} y1={py}
+                          x2={px} y2={py - h}
+                          stroke="url(#heatRiseGrad)"
+                          strokeWidth={1.2 + (seed % 3) * 0.3}
+                          strokeLinecap="round"
+                          className="heat-rise-wisp"
+                          style={{
+                            animationDelay: del + 's',
+                            animationDuration: dur + 's',
+                          }}
+                        />
+                      );
+                      idx++;
+                    }
+                  }
+                  return lines;
+                })()}
+              </g>
+            )}
+
           </svg>
 
-          {/* HTML label for top annotation */}
-          {(() => {
-            return null;
-          })()}
-
-          {/* HTML LABELS — alternating left / right */}
+          {/* HTML LABELS */}
           {geo.map((g, i) => {
             const delay = layerDelay(i);
             const isLeft = i % 2 === 0;
             const anchorY = isLeft ? (g.c.tnl[1] + g.c.bnl[1]) / 2 : (g.c.tfr[1] + g.c.bfr[1]) / 2;
             const topPct = (anchorY / SVG_H) * 100;
-            const endX = isLeft ? g.c.tnl[0] - 80 : g.c.tfr[0] + 100;
-            const labelX = isLeft ? endX - 6 : endX + 6;
+            const endX = isLeft ? g.c.tnl[0] - 50 : g.c.tfr[0] + 50;
+            const labelX = isLeft ? endX - 8 : endX + 8;
             const leftPct = (labelX / SVG_W) * 100;
             return (
               <div
                 key={'lbl-' + g.num}
-                className="absolute pointer-events-none flex items-center gap-0.5"
+                className="absolute pointer-events-none flex items-center"
                 style={{
                   top: topPct + '%',
+                  gap: '0.15rem',
                   ...(isLeft
                     ? { right: (100 - leftPct) + '%', flexDirection: 'row-reverse' }
                     : { left: leftPct + '%', flexDirection: 'row' }),
                   transform: 'translateY(-50%)',
-                  opacity: show ? 1 : 0,
-                  transition: 'opacity 1s ease ' + (delay + 0.8) + 's',
+                  opacity: show && !compressing ? 1 : 0,
+                  transition: compressing
+                    ? 'opacity 0.5s ease'
+                    : 'opacity 1s ease ' + (delay + 0.8) + 's',
                 }}
               >
                 <span className="font-black text-[8px] md:text-[10px] leading-none" style={{ color: g.frontColor }}>
