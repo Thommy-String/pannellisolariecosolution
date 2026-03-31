@@ -12,7 +12,7 @@ function Footer() {
       className="border-t border-slate-200 bg-slate-50 relative overflow-hidden"
     >
       {/* Background Decorative Element */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
       
       <div className="container mx-auto px-4 pt-16 pb-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -29,11 +29,11 @@ function Footer() {
             </Link>
             <div className="space-y-4">
               <p className="text-sm font-bold text-slate-800 leading-relaxed uppercase tracking-tight">
-                Ecosolution. Specialisti in posa pavimenti chiavi in mano.
+                Ecosolution. Specialisti in riscaldamento a pavimento chiavi in mano.
               </p>
-              <div className="flex items-center gap-2 text-emerald-600">
+              <div className="flex items-center gap-2 text-orange-600">
                 <Trophy className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-widest">N.1 in posa pavimenti con qualità garantita</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">N.1 in impianti radianti con qualità garantita</span>
               </div>
             </div>
           </div>
@@ -45,21 +45,21 @@ function Footer() {
             </p>
             <div className="grid grid-cols-1 gap-8">
               <div>
-                <p className="text-[10px] font-bold text-emerald-600 uppercase mb-3 tracking-widest">Posa Pavimenti</p>
+                <p className="text-[10px] font-bold text-orange-600 uppercase mb-3 tracking-widest">Impianti Radianti</p>
                 <ul className="space-y-2 text-sm text-slate-600 font-bold uppercase tracking-tighter">
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Parquet & Legno</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Gres Porcellanato</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">SPC / Vinilico</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Piastrelle Ceramiche</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante Standard</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante Basso Spessore</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante + Massetto</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Raffrescamento a Pavimento</li>
                 </ul>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-emerald-600 uppercase mb-3 tracking-widest">Servizi Correlati</p>
+                <p className="text-[10px] font-bold text-orange-600 uppercase mb-3 tracking-widest">Servizi Correlati</p>
                 <ul className="space-y-2 text-sm text-slate-600 font-bold uppercase tracking-tighter">
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Rifacimento Massetto</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Adeguamento Porte</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Posa Chiavi in Mano</li>
-                  <li className="hover:text-emerald-600 transition-colors cursor-pointer">Sopralluogo Gratuito</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Massetto Radiante</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Collegamento Caldaia / Pompa Calore</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Progettazione Termica</li>
+                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Sopralluogo Gratuito</li>
                 </ul>
               </div>
             </div>
@@ -101,9 +101,9 @@ function Footer() {
             <a 
               href={`tel:${PHONE_NUMBER.replace(/\D/g, '')}`}
               onClick={() => { if (typeof window.gtag_report_conversion === 'function') window.gtag_report_conversion(); }}
-              className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all group"
+              className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl hover:border-orange-500 hover:shadow-md transition-all group"
             >
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors">
                 <Phone className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
@@ -113,7 +113,7 @@ function Footer() {
             </a>
 
             <a 
-              href={`https://wa.me/${PHONE_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent(`Buongiorno ${COMPANY_NAME}, vorrei richiedere un sopralluogo gratuito.`)}`}
+              href={`https://wa.me/${PHONE_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent(`Buongiorno ${COMPANY_NAME}, vorrei richiedere un sopralluogo gratuito per un impianto di riscaldamento a pavimento.`)}`}
               onClick={() => { if (typeof window.gtag_report_conversion === 'function') window.gtag_report_conversion(); }}
               className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl hover:border-green-500 hover:shadow-md transition-all group"
             >

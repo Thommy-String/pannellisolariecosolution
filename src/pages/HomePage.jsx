@@ -4,6 +4,7 @@ import ScenarioSolutionsSection from '../components/ScenarioSolutionsSection';
 import PavimentQuiz from '../components/PavimentQuiz';
 import RecentWorks from '../components/RecentWorks';
 import MethodSection from '../components/MethodSection';
+import ServicesTable from '../components/ServicesTable';
 import AboutUs from '../components/AboutUs';
 import logoImage from '../assets/logo/eco-solutions-logo-.jpeg';
 import {
@@ -25,7 +26,7 @@ function HomePage() {
     // Scroll to top when page changes (non essenziale per la home, ma buona pratica)
     window.scrollTo(0, 0);
     // Cambia il title a seconda dell'esperienza che vuoi trasmettere
-    document.title = "Posa Pavimenti Professionale Milano | Chiavi in Mano";
+    document.title = "Riscaldamento a Pavimento Milano | Da €30/mq Chiavi in Mano";
   }, []);
 
   // 1. CONSIGLIO VIDEO: SCHEMA MARKUP
@@ -68,7 +69,7 @@ function HomePage() {
       }
     ],
     "serviceType": MAIN_CATEGORY,
-    "description": `Siamo specializzati in posa pavimenti chiavi in mano a ${PRIMARY_CITY}. Parquet, gres porcellanato, piastrelle, vinilico e molto altro. Nessun obbligo di acquisto, sopralluogo gratuito.`
+    "description": `Siamo specializzati in installazione riscaldamento a pavimento chiavi in mano a ${PRIMARY_CITY}. Impianto radiante a bassa temperatura, massetto, regolazione e collaudo. Da €30/mq, sopralluogo gratuito.`
   };
 
   return (
@@ -82,10 +83,12 @@ function HomePage() {
 
         <PavimentQuiz />
 
-        <ScenarioSolutionsSection />
-
         {/* Griglia Lavori Precedenti */}
         <RecentWorks />
+
+        <ServicesTable />
+
+        <ScenarioSolutionsSection />
 
         <div className="py-16 bg-white">
           <MethodSection />

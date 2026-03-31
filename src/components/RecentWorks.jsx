@@ -1,26 +1,18 @@
 import React from 'react';
-import lavoro1 from '../assets/lavori/lavoro1.webp';
-import lavoro2 from '../assets/lavori/lavoro2.jpeg';
-import lavoro3 from '../assets/lavori/lavoro3.jpg';
-import lavoro4 from '../assets/lavori/lavoro4.webp';
-import lavoro5 from '../assets/lavori/lavoro5.jpg';
-import lavoro6 from '../assets/lavori/lavoro6.jpg';
-import lavoro7 from '../assets/lavori/lavoro7.jpg';
-import lavoro8 from '../assets/lavori/lavoro8.jpg';
-import lavoro9 from '../assets/lavori/lavoro9.jpg';
-import lavoro10 from '../assets/lavori/lavoro10.jpg';
+import riscaldamento1 from '../assets/images/riscaldamento1.jpg';
+import riscaldamento2 from '../assets/images/riscaldamento2.jpg';
+import riscaldamento3 from '../assets/images/riscaldamento3.jpg';
+import riscaldamento4 from '../assets/images/riscaldamento4.jpg';
+import riscaldamento5 from '../assets/images/riscaldamento5.jpg';
+import riscaldamento6 from '../assets/images/riscaldamento6.jpg';
 
 const works = [
-    { id: 1, title: 'Gres porcellanato', sqm: 65, time: '4 gg', location: 'Milano', imageAfter: lavoro1, avatar: 'https://i.pravatar.cc/100?img=1', initials: 'MT', useInitials: false },
-    { id: 2, title: 'Terrazzo privato', sqm: 84, time: '6 gg', location: 'Varese', imageAfter: lavoro2, avatar: 'https://i.pravatar.cc/100?img=5', initials: 'GP', useInitials: false },
-    { id: 3, title: 'Parquet a spina di pesce', sqm: 88, time: '3 gg', location: 'Como', imageAfter: lavoro3, avatar: 'https://i.pravatar.cc/100?img=12', initials: 'RP', useInitials: true },
-    { id: 4, title: 'Bagno con piastrelle', sqm: 7, time: '2 gg', location: 'Monza', imageAfter: lavoro4, avatar: 'https://i.pravatar.cc/100?img=8', initials: 'CB', useInitials: true },
-    { id: 5, title: 'Laminato', sqm: 55, time: '2 gg', location: 'Milano - San Siro', imageAfter: lavoro5, avatar: 'https://i.pravatar.cc/100?img=3', initials: 'LM', useInitials: false },
-    { id: 6, title: 'Gres porecllanato', sqm: 120, time: '5 gg', location: 'Varese - Centro', imageAfter: lavoro6, avatar: 'https://i.pravatar.cc/100?img=15', initials: 'AC', useInitials: false },
-    { id: 7, title: 'Rivestimento bagno', sqm: 6, time: '3 gg', location: 'Como - Lago', imageAfter: lavoro7, avatar: 'https://i.pravatar.cc/100?img=7', initials: 'SV', useInitials: true },
-    { id: 8, title: 'Parquet prefinito', sqm: 106, time: '4 gg', location: 'Monza - Brianza', imageAfter: lavoro8, avatar: 'https://i.pravatar.cc/100?img=11', initials: 'DB', useInitials: false },
-    { id: 9, title: 'Parquet prefinito', sqm: 75, time: '3 gg', location: 'Milano - Centrale', imageAfter: lavoro9, avatar: 'https://i.pravatar.cc/100?img=9', initials: 'FR', useInitials: false },
-    { id: 10, title: 'Ceramica', sqm: 92, time: '5 gg', location: 'Varese - Lago', imageAfter: lavoro10, avatar: 'https://i.pravatar.cc/100?img=14', initials: 'MG', useInitials: false }
+    { id: 1, title: 'Radiante tradizionale',        sqm: 65,  time: '4 gg', location: 'Milano',            imageAfter: riscaldamento1, initials: 'MT' },
+    { id: 2, title: 'Radiante + massetto',       sqm: 84,  time: '6 gg', location: 'Varese',            imageAfter: riscaldamento2, initials: 'GP' },
+    { id: 3, title: 'Radiante tradizionale',   sqm: 88,  time: '3 gg', location: 'Como',              imageAfter: riscaldamento3, initials: 'RP' },
+    { id: 4, title: 'Radiante appartamento',     sqm: 55,  time: '3 gg', location: 'Milano - San Siro', imageAfter: riscaldamento4, initials: 'LM' },
+    { id: 5, title: 'Radiante + pompa calore',   sqm: 120, time: '5 gg', location: 'Varese - Centro',   imageAfter: riscaldamento5, initials: 'AC' },
+    { id: 6, title: 'Radiante villa',            sqm: 180, time: '7 gg', location: 'Monza - Brianza',   imageAfter: riscaldamento6, initials: 'DB' },
 ];
 
 const RecentWorks = () => {
@@ -30,17 +22,18 @@ const RecentWorks = () => {
                 
                 {/* Titolo Stilizzato */}
                 <div className="mb-12 max-w-4xl">
+                    
                     <h2 className="text-3xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
-                        Abbiamo posato più di <span className="text-yellow-500">3027mq</span>
+                        Oltre <span className="text-orange-500">15.000 mq</span> di impianti radianti
                         <br/>
                         <span className="relative inline-block">
-                            <span className="relative z-10">di pavimenti come gres, parquet, piastrelle... in tutta Lombardia</span>
-                            <span className="absolute bottom-2 left-0 w-full h-3 bg-yellow-400/30 -rotate-1 -z-0"></span>
+                            <span className="relative z-10">installati a regola d'arte</span>
+                            <span className="absolute bottom-2 left-0 w-full h-3 bg-orange-400/30 -rotate-1 -z-0"></span>
                         </span>
                     </h2>
                 </div>
                 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {works.map((work) => (
                         <div key={work.id} className="group relative aspect-square overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
                             <img 
@@ -71,28 +64,11 @@ const RecentWorks = () => {
                             {/* Avatar, Stelle e Posizione in basso */}
                             <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-slate-900/90 to-transparent">
                                 <div className="flex items-center gap-2">
-                                    {/* Avatar circolare */}
-                                    <div className="relative w-8 h-8 rounded-full object-cover border-2 border-yellow-400 overflow-hidden flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-                                        {work.useInitials ? (
-                                            <span className="text-xs font-black text-white">
-                                                {work.initials}
-                                            </span>
-                                        ) : (
-                                            <img 
-                                                src={work.avatar} 
-                                                alt={work.title}
-                                                className="w-full h-full object-cover"
-                                                onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextElementSibling.style.display = 'flex';
-                                                }}
-                                            />
-                                        )}
-                                        {!work.useInitials && (
-                                            <span className="hidden text-xs font-black text-white">
-                                                {work.initials}
-                                            </span>
-                                        )}
+                                    {/* Avatar con iniziali */}
+                                    <div className="w-8 h-8 rounded-full border-2 border-yellow-400 flex items-center justify-center bg-gradient-to-br from-orange-500 to-amber-600 shrink-0">
+                                        <span className="text-xs font-black text-white leading-none">
+                                            {work.initials}
+                                        </span>
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         {/* Stelle */}

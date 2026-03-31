@@ -3,12 +3,12 @@ import react from '@vitejs/plugin-react'
 
 // Il sotto-percorso su cui questa landing verrà servita in produzione.
 // In dev usiamo '/' per comodità (localhost:5173/).
-const LANDING_BASE = '/pavimenti/'
+const LANDING_BASE = '/riscaldamento-pavimento/'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  // In dev → '/'  |  In build/preview → '/pavimenti/'
+  // In dev → '/'  |  In build/preview → '/riscaldamento-pavimento/'
   base: command === 'serve' ? '/' : LANDING_BASE,
   // Espone la variabile a runtime nel codice React (import.meta.env.VITE_BASE_PATH)
   define: {

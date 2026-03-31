@@ -8,7 +8,7 @@ import './index.css'
 import HomePage from './pages/HomePage.jsx'
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage.jsx'))
 
-// In dev → basename="/"  |  In build → basename="/impermeabilizzazioni"
+// In dev → basename="/"  |  In build → basename="/riscaldamento-pavimento"
 const basePath = import.meta.env.VITE_BASE_PATH?.replace(/\/$/, '') || '/'
 
 ReactDOM.createRoot(document.getElementById('root')).render(

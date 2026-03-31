@@ -48,7 +48,7 @@ function AboutUs() {
                             {/* CTA Button */}
                             <div className="pt-4">
                                 <a 
-                                    href={`https://wa.me/${PHONE_NUMBER.replace(/\s+/g, '')}?text=${encodeURIComponent("Ciao! Vorrei parlarvi del mio progetto di ristrutturazione/edile.")}`}
+                                    href={`https://wa.me/${PHONE_NUMBER.replace(/\s+/g, '')}?text=${encodeURIComponent("Ciao! Vorrei parlarvi del mio progetto di riscaldamento a pavimento.")}`}
                                     className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-4 rounded-xl font-black uppercase tracking-tighter transition-all hover:-translate-y-1 shadow-lg shadow-yellow-400/20"
                                 >
                                     <MessageCircle className="w-5 h-5" />

@@ -9,7 +9,8 @@
     "build": "vite build",
     "postbuild": "node scripts/generate-sitemap.js", 
     "preview": "vite preview",
-    "deploy": "npm run build"
+    "deploy": "npm run build",
+    "optimize-images": "node scripts/optimize-images.mjs"
 },
   "dependencies": {
     "lucide-react": "^0.548.0",

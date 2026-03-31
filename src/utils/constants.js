@@ -1,12 +1,12 @@
 // Dati Aziendali (DEVONO CORRISPONDERE AL TUO GBP)
-export const COMPANY_NAME = "Posa Pavimenti Milano"; // Il tuo nome commerciale
-export const MAIN_CATEGORY = "Posa Pavimenti";
+export const COMPANY_NAME = "Riscaldamento a Pavimento Milano"; // Il tuo nome commerciale
+export const MAIN_CATEGORY = "Riscaldamento a Pavimento";
 export const PRIMARY_CITY = "Milano";
 
 // Usa il numero di telefono REALE che hai sul GBP
 export const PHONE_NUMBER = "+39 334 222 1212"; 
-export const EMAIL_ADDRESS = "info@posapavimentimilano.it"; 
-export const WEBSITE_URL = "https://www.ecosolutionsas.com/pavimenti";
+export const EMAIL_ADDRESS = "info@ecosolutionsas.com"; 
+export const WEBSITE_URL = "https://www.ecosolutionsas.com/riscaldamento-pavimento";
 // Questo è l'indirizzo di REGISTRAZIONE (es. casa tua)
 // Serve per lo Schema Markup, anche se è NASCOSTO sul GBP
 export const SCHEMA_ADDRESS = {
@@ -25,12 +25,12 @@ export const SCHEMA_GEO = {
 
 // Queste DEVONO corrispondere alle Categorie Secondarie del tuo GBP
 export const GBP_CATEGORIES = [
-  "Posa pavimenti",
-  "Posa gres porcellanato",
-  "Posa parquet",
-  "Posa piastrelle",
-  "Rifacimento massetto",
-  "Adeguamento porte",
+  "Riscaldamento a pavimento",
+  "Impianto radiante",
+  "Pannelli radianti",
+  "Riscaldamento radiante a bassa temperatura",
+  "Massetto per impianto radiante",
+  "Termostati e regolazione",
 ];
 
 // Queste sono le AREE DI SERVIZIO che hai inserito nel GBP

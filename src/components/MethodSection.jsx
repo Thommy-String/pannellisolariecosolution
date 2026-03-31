@@ -3,27 +3,27 @@ import { Brush, Ruler, CheckCircle2, ArrowRight } from 'lucide-react';
 const steps = [
     {
         number: "1",
-        title: "Sopralluogo & Consulenza",
-        subtitle: "Capire Il Tuo Progetto",
-        desc: "Veniamo a casa tua per misurare, analizzare lo stato attuale e discutere delle tue preferenze. Rileviamo anche eventuali problematiche (umidità, dislivelli, ecc).",
+        title: "Sopralluogo & Progettazione",
+        subtitle: "Analisi del tuo spazio",
+        desc: "Veniamo a casa tua per misurare, analizzare l'isolamento e le esigenze termiche. Progettiamo l'impianto radiante su misura, calcolando il fabbisogno zona per zona.",
         icon: Ruler,
         color: "bg-blue-600"
     },
     {
         number: "2",
-        title: "Preparazione del Fondo",
-        subtitle: "Base Perfetta",
-        desc: "Puliamo accuratamente, ripariamo eventuali crepe, operiamo il livellamento se necessario. Una base piana è fondamentale per una posa corretta.",
+        title: "Installazione Impianto",
+        subtitle: "Posa professionale",
+        desc: "Posiamo pannelli isolanti, tubazioni e collettori. Colleghiamo l'impianto alla caldaia o pompa di calore, eseguiamo il collaudo idraulico e la prova di tenuta.",
         icon: Brush,
         color: "bg-amber-500"
     },
     {
         number: "3",
-        title: "Posa Millimetrica & Rifinitura",
-        subtitle: "Qualità Garantita",
-        desc: "Posiamo con sistemi autolivellanti, rifiniamo gli angoli, riposizioniamo porte e battiscopa. Ispezionamo ogni dettaglio prima di consegnare.",
+        title: "Massetto & Collaudo Finale",
+        subtitle: "Tutto funzionante",
+        desc: "Realizziamo il massetto radiante, regoliamo termostati e zone, collaudiamo l'intero sistema. Ti consegniamo casa calda, pronta da vivere e con risparmio garantito.",
         icon: CheckCircle2,
-        color: "bg-emerald-600"
+        color: "bg-orange-500"
     }
 ];
 
@@ -32,19 +32,19 @@ function MethodSection() {
         <section className="bg-white py-20 border-b-2 border-slate-100">
             <div className="container mx-auto px-4">
                 <div className="max-w-4xl mb-16">
-                    <div className="inline-flex items-center px-3 py-1 bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] mb-4">
+                    <div className="inline-flex items-center px-3 py-1 bg-orange-500 text-white font-bold uppercase tracking-widest text-[10px] mb-4">
                         3 fasi
                     </div>
                     <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 uppercase tracking-tighter leading-none">
                         <span className="relative inline-block">
                             <span className="relative z-10 px-2">Il Nostro Processo</span>
-                            <span className="absolute inset-0 bg-emerald-300 -rotate-1 z-0"></span>
+                            <span className="absolute inset-0 bg-orange-300 -rotate-1 z-0"></span>
                         </span>
                         <br/>
-                        <span className="text-emerald-600">Posa Chiavi in Mano</span>
+                        <span className="text-orange-500">Impianto Radiante Chiavi in Mano</span>
                     </h2>
-                    <p className="text-slate-600 text-lg md:text-xl font-medium max-w-2xl border-l-4 border-emerald-600 pl-6 py-2">
-                        Dal sopralluogo gratuito alla posa finale. Il nostro metodo garantisce un pavimento perfetto, puntuale e senza stress.
+                    <p className="text-slate-600 text-lg md:text-xl font-medium max-w-2xl border-l-4 border-orange-500 pl-6 py-2">
+                        Dal sopralluogo gratuito al collaudo finale. Il nostro metodo garantisce un impianto radiante perfetto, puntuale e senza stress.
                     </p>
                 </div>
 
@@ -67,7 +67,7 @@ function MethodSection() {
 
                                 {/* Content */}
                                 <div className="relative">
-                                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2 block">
+                                    <span className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-2 block">
                                         {step.subtitle}
                                     </span>
                                     <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase leading-tight tracking-tighter">

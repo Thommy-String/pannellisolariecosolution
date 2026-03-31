@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.ecosolutionsas.com/impermeabilizzazioni/sitemap.xml
+Sitemap: https://www.ecosolutionsas.com/riscaldamento-pavimento/sitemap.xml

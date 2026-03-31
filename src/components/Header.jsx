@@ -51,7 +51,7 @@ function Header() {
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mt-1">
                   <span className="text-[10px] md:text-sm font-medium text-slate-600 uppercase tracking-widest">
-                    Ditta Edile - posa pavimenti
+                    Ditta Edile - riscaldamento a pavimento
                   </span>
                   <span className="hidden md:block w-1 h-1 bg-slate-300 rounded-full"></span>
                   {/* Phone CTA - Responsive */}
