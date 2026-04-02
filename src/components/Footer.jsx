@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { COMPANY_NAME, PHONE_NUMBER } from '../utils/constants';
 import logoImage from '../assets/logo/eco-solutions-logo-.jpeg';
-import { Phone, MessageCircle, Mail, MapPin, Trophy, Clock } from 'lucide-react';
+import { Phone, MessageCircle, Mail, MapPin, Zap, Clock } from 'lucide-react';
 
 function Footer() {
   const email = "info@ecosolutionsas.com"; 
@@ -9,10 +9,10 @@ function Footer() {
   return (
     <footer
       id="contatti"
-      className="border-t border-slate-200 bg-slate-50 relative overflow-hidden"
+      className="border-t border-slate-200 bg-white relative overflow-hidden"
     >
       {/* Background Decorative Element */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/3 rounded-full -mr-32 -mt-32 blur-3xl"></div>
       
       <div className="container mx-auto px-4 pt-16 pb-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -29,11 +29,11 @@ function Footer() {
             </Link>
             <div className="space-y-4">
               <p className="text-sm font-bold text-slate-800 leading-relaxed uppercase tracking-tight">
-                Ecosolution. Specialisti in riscaldamento a pavimento chiavi in mano.
+                Ecosolution. Specialisti in impianti fotovoltaici chiavi in mano.
               </p>
-              <div className="flex items-center gap-2 text-orange-600">
-                <Trophy className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-widest">N.1 in impianti radianti con qualità garantita</span>
+              <div className="flex items-center gap-2 text-yellow-600">
+                <Zap className="w-5 h-5" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Energia solare con squadre interne</span>
               </div>
             </div>
           </div>
@@ -45,21 +45,21 @@ function Footer() {
             </p>
             <div className="grid grid-cols-1 gap-8">
               <div>
-                <p className="text-[10px] font-bold text-orange-600 uppercase mb-3 tracking-widest">Impianti Radianti</p>
+                <p className="text-[10px] font-bold text-yellow-600 uppercase mb-3 tracking-widest">Impianti Fotovoltaici</p>
                 <ul className="space-y-2 text-sm text-slate-600 font-bold uppercase tracking-tighter">
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante Standard</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante Basso Spessore</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Radiante + Massetto</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Raffrescamento a Pavimento</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Impianto 3-5 kWp</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Impianto 6-10 kWp</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Fotovoltaico + Batteria</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Pompa Calore Solare</li>
                 </ul>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-orange-600 uppercase mb-3 tracking-widest">Servizi Correlati</p>
+                <p className="text-[10px] font-bold text-yellow-600 uppercase mb-3 tracking-widest">Servizi Inclusi</p>
                 <ul className="space-y-2 text-sm text-slate-600 font-bold uppercase tracking-tighter">
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Massetto Radiante</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Collegamento Caldaia / Pompa Calore</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Progettazione Termica</li>
-                  <li className="hover:text-orange-600 transition-colors cursor-pointer">Sopralluogo Gratuito</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Sopralluogo Gratuito</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Pratiche GSE e Enel</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Detrazioni Fiscali</li>
+                  <li className="hover:text-yellow-600 transition-colors cursor-pointer">Assistenza 25 Anni</li>
                 </ul>
               </div>
             </div>
@@ -101,29 +101,19 @@ function Footer() {
             <a 
               href={`tel:${PHONE_NUMBER.replace(/\D/g, '')}`}
               onClick={() => { if (typeof window.gtag_report_conversion === 'function') window.gtag_report_conversion(); }}
-              className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl hover:border-orange-500 hover:shadow-md transition-all group"
+              className="inline-flex items-center justify-center gap-3 w-full bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-extrabold uppercase tracking-tight px-6 py-4 rounded-2xl text-sm md:text-base transition-all shadow-[0_8px_0_0_rgba(161,98,7,0.8),0_16px_30px_-6px_rgba(250,204,21,0.4)] hover:shadow-[0_4px_0_0_rgba(161,98,7,0.8),0_12px_20px_-4px_rgba(250,204,21,0.5)] hover:-translate-y-0.5 active:translate-y-1"
             >
-              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-slate-400 uppercase">Chiamata Diretta</span>
-                <span className="text-sm font-black text-slate-900">{PHONE_NUMBER}</span>
-              </div>
+              <Phone className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+              Chiama: {PHONE_NUMBER}
             </a>
 
             <a 
-              href={`https://wa.me/${PHONE_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent(`Buongiorno ${COMPANY_NAME}, vorrei richiedere un sopralluogo gratuito per un impianto di riscaldamento a pavimento.`)}`}
+              href={`https://wa.me/${PHONE_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent(`Buongiorno ${COMPANY_NAME}, vorrei un preventivo per un impianto fotovoltaico.`)}`}
               onClick={() => { if (typeof window.gtag_report_conversion === 'function') window.gtag_report_conversion(); }}
-              className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl hover:border-green-500 hover:shadow-md transition-all group"
+              className="inline-flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold uppercase tracking-tight px-6 py-4 rounded-2xl text-sm md:text-base transition-all shadow-[0_8px_0_0_rgba(25,118,65,0.8),0_16px_30px_-6px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_0_0_rgba(25,118,65,0.8),0_12px_20px_-4px_rgba(37,211,102,0.5)] hover:-translate-y-0.5 active:translate-y-1"
             >
-              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                <MessageCircle className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-slate-400 uppercase">WhatsApp</span>
-                <span className="text-sm font-black text-slate-900">Chat Rapida</span>
-              </div>
+              <MessageCircle className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+              WhatsApp
             </a>
 
             <a 

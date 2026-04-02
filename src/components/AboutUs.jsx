@@ -49,9 +49,9 @@ function AboutUs() {
                             <div className="pt-4">
                                 <a 
                                     href={`https://wa.me/${PHONE_NUMBER.replace(/\s+/g, '')}?text=${encodeURIComponent("Ciao! Vorrei parlarvi del mio progetto di riscaldamento a pavimento.")}`}
-                                    className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-4 rounded-xl font-black uppercase tracking-tighter transition-all hover:-translate-y-1 shadow-lg shadow-yellow-400/20"
+                                    className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 py-5 rounded-2xl font-black uppercase tracking-tight transition-all shadow-[0_8px_0_0_rgba(25,118,65,0.8),0_16px_30px_-6px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_0_0_rgba(25,118,65,0.8),0_12px_20px_-4px_rgba(37,211,102,0.5)] hover:-translate-y-0.5 active:translate-y-1"
                                 >
-                                    <MessageCircle className="w-5 h-5" />
+                                    <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
                                     Parlaci del tuo progetto
                                 </a>
                             </div>

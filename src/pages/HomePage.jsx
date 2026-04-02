@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Hero from '../components/Hero';
 import ScenarioSolutionsSection from '../components/ScenarioSolutionsSection';
-import PavimentQuiz from '../components/PavimentQuiz';
+import SolarQuiz from '../components/SolarQuiz';
+import SolarBenefitsSection from '../components/SolarBenefitsSection';
+import HowItWorks from '../components/HowItWorks';
 import RecentWorks from '../components/RecentWorks';
-import MethodSection from '../components/MethodSection';
-import ServicesTable from '../components/ServicesTable';
 import AboutUs from '../components/AboutUs';
 import logoImage from '../assets/logo/eco-solutions-logo-.jpeg';
 import {
@@ -81,18 +81,15 @@ function HomePage() {
 
         <Hero />
 
-        <PavimentQuiz />
+        <SolarQuiz />
 
-        {/* Griglia Lavori Precedenti */}
         <RecentWorks />
 
-        <ServicesTable />
+        <HowItWorks />
 
         <ScenarioSolutionsSection />
 
-        <div className="py-16 bg-white">
-          <MethodSection />
-        </div>
+        <SolarBenefitsSection />
 
         <AboutUs />
 
